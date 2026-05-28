@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sachin Kirana Invoice Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-left">
+            <h1><i class="fa-solid fa-shop"></i> Sachin Kirana</h1>
+            <p class="datetime" id="current-datetime">Loading...</p>
+        </div>
+        <div class="header-right">
+            <span class="invoice-badge">Invoice: <strong id="invoice-number">INV-0001</strong></span>
+            <button id="theme-toggle" class="icon-btn"><i class="fa-solid fa-moon"></i></button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="panel input-panel">
+            
+            <section class="card">
+                <h2><i class="fa-solid fa-user"></i> Customer Details</h2>
+                <div class="input-group-row">
+                    <div class="input-group">
+                        <label>Name</label>
+                        <input type="text" id="cust-name" placeholder="Enter customer name">
+                    </div>
+                    <div class="input-group">
+                        <label>WhatsApp Number</label>
+                        <input type="tel" id="cust-mobile" placeholder="10-digit number (without +91)">
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2><i class="fa-solid fa-cart-plus"></i> Add Items</h2>
+                
+                <div id="camera-container" style="display: none;">
+                    <div id="reader"></div>
+                    <button class="btn btn-danger" id="stop-camera-btn" style="width: 100%; margin-top: 10px;">
+                        <i class="fa-solid fa-camera-rotate"></i> Stop Camera
+                    </button>
+                </div>
+
+                <div class="input-group-row mb-15 barcode-section">
+                    <div class="input-group flex-2">
+                        <label><i class="fa-solid fa-barcode"></i> Scan via Physical Scanner</label>
+                        <input type="text" id="barcode-input" placeholder="Click here & use laser scanner..." autofocus>
+                    </div>
+                    <div class="input-group flex-1" style="justify-content: flex-end;">
+                        <button class="btn btn-outline" id="start-camera-btn" style="height: 42px;">
+                            <i class="fa-solid fa-camera"></i> Use Camera
+                        </button>
+                    </div>
+                </div>
+
+                <div class="input-group-row align-bottom">
+                    <div class="input-group flex-2">
+                        <label>Item Name</label>
+                        <input type="text" id="item-name" placeholder="e.g. Rice, Oil">
+                    </div>
+                    <div class="input-group flex-1">
+                        <label>Qty / Unit</label>
+                        <input type="text" id="item-unit" list="unit-options" placeholder="e.g. 1 kg">
+                        <datalist id="unit-options">
+                            <option value="1 kg">
+                            <option value="500 g">
+                            <option value="1 Liter">
+                            <option value="500 ml">
+                            <option value="1 Unit">
+                            <option value="Pack of 12">
+                            <option value="Pack of 24">
+                        </datalist>
+                    </div>
+                    <div class="input-group flex-1">
+                        <label>Price (₹)</label>
+                        <input type="number" id="item-price" placeholder="0">
+                    </div>
+                    <button class="btn btn-primary" id="add-item-btn"><i class="fa-solid fa-plus"></i> Add</button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="items-table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Item Name</th>
+                                <th>Unit/Qty</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-body">
+                            </tbody>
+                    </table>
+                    <div id="empty-state" class="empty-state">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <p>No items added yet.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2><i class="fa-solid fa-calculator"></i> Billing & Payment</h2>
+                
+                <div class="totals">
+                    <div class="total-row final"><span>Total Amount:</span> <span id="final-total-display">₹0</span></div>
+                </div>
+
+                <div class="payment-methods">
+                    <label>Payment Method:</label>
+                    <select id="payment-method">
+                        <option value="Cash">Cash</option>
+                        <option value="UPI">UPI</option>
+                        <option value="Card">Card</option>
+                        <option value="Pay Later">Pay Later</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-success generate-btn" id="generate-invoice-btn">Generate & Save Invoice</button>
+            </section>
+        </div>
+
+        <div class="panel preview-panel">
+            
+            <section class="card invoice-card" id="invoice-preview" style="display: none;">
+                <div class="invoice-header">
+                    <h2>Sachin Kirana</h2>
+                    <p class="sub-text">Date: <span id="inv-date"></span> | <span id="inv-num"></span></p>
+                </div>
+                
+                <div class="invoice-customer">
+                    <p><strong>Billed To:</strong> <span id="inv-cust-name"></span></p>
+                    <p><strong>WhatsApp:</strong> <span id="inv-cust-mobile"></span></p>
+                </div>
+
+                <div class="invoice-items" id="inv-items-list">
+                    </div>
+
+                <div class="invoice-summary">
+                    <h3 class="inv-total">Total: <span id="inv-total-amt"></span></h3>
+                    <div class="payment-status-badge" id="inv-status-badge">PAID</div>
+                    <p class="sub-text">Method: <span id="inv-method"></span></p>
+                </div>
+                
+                <div class="invoice-actions no-print">
+                    <button class="btn btn-primary" id="share-wa-btn" title="Send WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+                    <button class="btn btn-outline" id="download-btn" title="Download Bill"><i class="fa-solid fa-download"></i> Save</button>
+                    <button class="btn btn-outline" id="print-btn" title="Print/PDF"><i class="fa-solid fa-print"></i> Print</button>
+                </div>
+            </section>
+
+            <section class="card pending-section">
+                <div class="pending-header">
+                    <h2><i class="fa-solid fa-clock-rotate-left"></i> Pending Bills</h2>
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="search-pending" placeholder="Search customer...">
+                    </div>
+                </div>
+                <div class="pending-list" id="pending-list">
+                    </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
