@@ -5,14 +5,19 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- PROTECT THE PAGE ---
 async function checkAuth() {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    // If no user is logged in, kick them to login page
-    if (!session) {
+    try {
+        const { data, error } = await supabase.auth.getSession();
+        
+        // If there's an error or no active session, kick them to login page
+        if (error || !data.session) {
+            window.location.replace('login.html');
+            return false;
+        }
+        return true; // User is authenticated
+    } catch (err) {
         window.location.replace('login.html');
         return false;
     }
-    return true; // User is authenticated
 }
 
 // --- LOGOUT FUNCTIONALITY ---
