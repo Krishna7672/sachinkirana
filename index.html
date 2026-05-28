@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Barcode Scanner Library -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     
     <link rel="stylesheet" href="style.css">
@@ -19,13 +20,16 @@
         </div>
         <div class="header-right">
             <span class="invoice-badge">Invoice: <strong id="invoice-number">INV-0001</strong></span>
-            <button id="theme-toggle" class="icon-btn"><i class="fa-solid fa-moon"></i></button>
+            <button id="theme-toggle" class="icon-btn" title="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+            <button id="logout-btn" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
         </div>
     </header>
 
     <div class="main-container">
+        <!-- LEFT COLUMN: Input Forms -->
         <div class="panel input-panel">
             
+            <!-- Customer Details -->
             <section class="card">
                 <h2><i class="fa-solid fa-user"></i> Customer Details</h2>
                 <div class="input-group-row">
@@ -40,9 +44,11 @@
                 </div>
             </section>
 
+            <!-- Add Items & Barcode Scanner -->
             <section class="card">
                 <h2><i class="fa-solid fa-cart-plus"></i> Add Items</h2>
                 
+                <!-- Camera Preview Container -->
                 <div id="camera-container" style="display: none;">
                     <div id="reader"></div>
                     <button class="btn btn-danger" id="stop-camera-btn" style="width: 100%; margin-top: 10px;">
@@ -50,6 +56,7 @@
                     </button>
                 </div>
 
+                <!-- Barcode Input Section -->
                 <div class="input-group-row mb-15 barcode-section">
                     <div class="input-group flex-2">
                         <label><i class="fa-solid fa-barcode"></i> Scan via Physical Scanner</label>
@@ -62,6 +69,7 @@
                     </div>
                 </div>
 
+                <!-- Manual Item Entry -->
                 <div class="input-group-row align-bottom">
                     <div class="input-group flex-2">
                         <label>Item Name</label>
@@ -99,7 +107,8 @@
                             </tr>
                         </thead>
                         <tbody id="items-body">
-                            </tbody>
+                            <!-- Items will populate here -->
+                        </tbody>
                     </table>
                     <div id="empty-state" class="empty-state">
                         <i class="fa-solid fa-basket-shopping"></i>
@@ -108,6 +117,7 @@
                 </div>
             </section>
 
+            <!-- Billing & Payment -->
             <section class="card">
                 <h2><i class="fa-solid fa-calculator"></i> Billing & Payment</h2>
                 
@@ -129,8 +139,10 @@
             </section>
         </div>
 
+        <!-- RIGHT COLUMN: Invoice Preview & Pending Bills -->
         <div class="panel preview-panel">
             
+            <!-- Invoice Preview Card -->
             <section class="card invoice-card" id="invoice-preview" style="display: none;">
                 <div class="invoice-header">
                     <h2>Sachin Kirana</h2>
@@ -143,7 +155,8 @@
                 </div>
 
                 <div class="invoice-items" id="inv-items-list">
-                    </div>
+                    <!-- Invoice items render here -->
+                </div>
 
                 <div class="invoice-summary">
                     <h3 class="inv-total">Total: <span id="inv-total-amt"></span></h3>
@@ -158,6 +171,7 @@
                 </div>
             </section>
 
+            <!-- Pending Bills Section -->
             <section class="card pending-section">
                 <div class="pending-header">
                     <h2><i class="fa-solid fa-clock-rotate-left"></i> Pending Bills</h2>
@@ -167,11 +181,14 @@
                     </div>
                 </div>
                 <div class="pending-list" id="pending-list">
-                    </div>
+                    <!-- Pending cards render here -->
+                </div>
             </section>
         </div>
     </div>
 
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
 </body>
 </html>

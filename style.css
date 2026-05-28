@@ -24,6 +24,12 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
 body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; }
 
+/* Login Page Specifics */
+.login-body { display: flex; align-items: center; justify-content: center; height: 100vh; background-color: var(--bg-main); }
+.login-container { max-width: 400px; width: 100%; padding: 30px; }
+.login-header { text-align: center; margin-bottom: 25px; }
+.login-header h2 { color: var(--primary); font-size: 1.8rem; margin-bottom: 5px; border: none; justify-content: center; }
+
 /* Header */
 .app-header { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem; background-color: var(--card-bg); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
 .app-header h1 { color: var(--primary); font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
@@ -104,7 +110,7 @@ th { color: var(--text-muted); font-weight: 500; }
 .search-box input { padding-left: 35px; width: 200px; }
 .pending-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto;}
 .pending-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-main); border-radius: 8px; border-left: 4px solid var(--danger); animation: fadeIn 0.3s ease-out; }
-.p-info h4 { font-size: 0.95rem; }
+.p-info h4 { font-size: 0.95rem; margin-bottom: 2px; }
 .p-info p { font-size: 0.8rem; color: var(--text-muted); }
 .p-amt { font-weight: 700; color: var(--danger); font-size: 1.1rem; }
 .p-actions { display: flex; gap: 10px; align-items: center;}
