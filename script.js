@@ -1,12 +1,12 @@
 // --- SUPABASE SETUP ---
 const SUPABASE_URL = 'https://dzquzetqftvphhbzgedz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6cXV6ZXRxZnR2cGhoYnpnZWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MzQwNjEsImV4cCI6MjA5NTUxMDA2MX0.jYRP99xLfQTAltf8ByAzFpT4JpLB-hvSmf4_8-KsUlI'; // You MUST replace this with your actual anon key
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- PROTECT THE PAGE ---
 async function checkAuth() {
     try {
-        const { data, error } = await supabase.auth.getSession();
+        const { data, error } = await supabaseClient.auth.getSession();
         
         // If there's an error or no active session, kick them to login page
         if (error || !data.session) {
@@ -22,7 +22,7 @@ async function checkAuth() {
 
 // --- LOGOUT FUNCTIONALITY ---
 document.getElementById('logout-btn').addEventListener('click', async () => {
-    await supabase.auth.signOut();
+    await supabaseClient.auth.signOut();
     window.location.replace('login.html');
 });
 
@@ -258,7 +258,7 @@ generateBtn.addEventListener('click', async () => {
 
     try {
         // 1. Insert Invoice
-        const { error: invError } = await supabase
+        const { error: invError } = await supabaseClient
             .from('invoices')
             .insert([currentInvoiceObj]);
 
@@ -344,7 +344,7 @@ document.getElementById('print-btn').addEventListener('click', () => window.prin
 // ==========================================
 async function fetchPendingBills() {
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from('invoices')
             .select('*')
             .eq('status', 'PAYMENT PENDING');
@@ -389,7 +389,7 @@ window.sendReminder = function(name, mobile, amount) {
 window.markAsPaid = async function(id) {
     if(confirm("Mark this invoice as Paid?")) {
         try {
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from('invoices')
                 .update({ status: 'PAID' })
                 .eq('id', id);

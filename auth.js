@@ -2,7 +2,7 @@
 const SUPABASE_URL = 'https://dzquzetqftvphhbzgedz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6cXV6ZXRxZnR2cGhoYnpnZWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MzQwNjEsImV4cCI6MjA5NTUxMDA2MX0.jYRP99xLfQTAltf8ByAzFpT4JpLB-hvSmf4_8-KsUlI'; // You MUST replace this with your actual anon key
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // DOM Elements
 const loginForm = document.getElementById('login-form');
@@ -13,7 +13,7 @@ const loginBtn = document.getElementById('login-btn');
 
 // Check if already logged in
 async function checkCurrentSession() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
         window.location.href = 'index.html'; // Redirect to app if already logged in
     }
@@ -33,7 +33,7 @@ loginForm.addEventListener('submit', async (e) => {
     const email = emailInput.value.trim();
     const password = passwordInput.value;
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
         email: email,
         password: password,
     });
